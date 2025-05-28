@@ -66,14 +66,7 @@ tabs = st.tabs([
     "🔮 Simulación de Escenarios",
     "🗺️ Riesgo Geoespacial"
 ])
-        "📊 Información General",
-        "📌 Cumplimiento Tributario",
-        "📉 Cartera Morosa",
-        "🏗️ Oportunidades Catastrales",
-        "💼 Estrategias de Cobro",
-        "🔮 Simulación de Escenarios",
-        "🗺️ Riesgo Geoespacial"
-    ])
+        
 
 
 
