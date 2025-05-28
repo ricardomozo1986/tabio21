@@ -56,35 +56,7 @@ tabs = st.tabs([
     "🔮 Simulación de Escenarios",
     "🗺️ Riesgo Geoespacial"
 ])
-    "📊 Información General",
-    "📌 Cumplimiento Tributario",
-    "📉 Cartera Morosa",
-    "🏗️ Oportunidades Catastrales",
-    "💼 Estrategias de Cobro",
-    "🔮 Simulación de Escenarios",
-    "🗺️ Riesgo Geoespacial"
-])
-
-tabs = st.tabs([
-    "📊 Información General",
-    "📌 Cumplimiento Tributario",
-    "📉 Cartera Morosa",
-    "🏗️ Oportunidades Catastrales",
-    "💼 Estrategias de Cobro",
-    "🔮 Simulación de Escenarios",
-    "🗺️ Riesgo Geoespacial"
-])
-        "📊 Información General",
-        "📌 Cumplimiento Tributario",
-        "📉 Cartera Morosa",
-        "🏗️ Oportunidades Catastrales",
-        "💼 Estrategias de Cobro",
-        "🔮 Simulación de Escenarios",
-        "🗺️ Riesgo Geoespacial"
-    ])
-
-
-
+   
 with tabs[0]:
     st.subheader("📊 Información General")
 
