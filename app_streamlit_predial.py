@@ -80,6 +80,7 @@ if uploaded_file:
         st.warning("Los filtros seleccionados no arrojaron ningún resultado. Por favor, ajuste los filtros.")
         st.stop() # Detener la ejecución si no hay datos filtrados
 
+    # CORRECCIÓN: Indentación de la variable `tabs`
     tabs = st.tabs([
         "📊 Información General",
         "📌 Cumplimiento Tributario",
@@ -108,7 +109,7 @@ if uploaded_file:
         rural = resumen_tabla(df_filtrado[df_filtrado['sector'].astype(str).str.upper() == 'RURAL'])
 
         resumen_df = pd.DataFrame([total, urbano, rural], index=["Total", "Urbano", "Rural"]).T
-        
+
         # Formato de dinero a las columnas relevantes
         format_mapping = {
             "Avalúo total": "${:,.0f}",
@@ -117,7 +118,7 @@ if uploaded_file:
             "Descuento total": "${:,.0f}",
             "Saldo por pagar": "${:,.0f}"
         }
-        
+
         # Corrección del error aquí: st.dataframe.style.format necesita un diccionario
         try:
             st.dataframe(
@@ -178,8 +179,16 @@ if uploaded_file:
 
 
         st.markdown("### Tabla de Predios que Pagaron")
-        if not tabla_pagados.empty:
-            tabla_pagados = pagados.sort_values(by="recaudo_predial", ascending=False)[
+        # Asegurarse de que la tabla_pagados se defina antes de usarse y que las columnas sean numéricas para el formato.
+        # CORRECCIÓN: Asegurar que 'pagados' se defina correctamente antes de crear 'tabla_pagados'
+        if not pagados.empty:
+            # Asegurarse de que las columnas a formatear sean numéricas aquí también,
+            # a pesar de la conversión inicial, para evitar el ValueError en .style.format()
+            pagados_display = pagados.copy()
+            pagados_display["valor_impuesto_a_pagar"] = pd.to_numeric(pagados_display["valor_impuesto_a_pagar"], errors='coerce').fillna(0)
+            pagados_display["recaudo_predial"] = pd.to_numeric(pagados_display["recaudo_predial"], errors='coerce').fillna(0)
+
+            tabla_pagados = pagados_display.sort_values(by="recaudo_predial", ascending=False)[
                 ["codigo_igac", "vereda", "sector", "valor_impuesto_a_pagar", "recaudo_predial"]
             ]
             st.dataframe(tabla_pagados.reset_index(drop=True).style.format({"valor_impuesto_a_pagar": "${:,.0f}", "recaudo_predial": "${:,.0f}"}))
@@ -197,9 +206,9 @@ if uploaded_file:
 
         # Mapa de morosos
         if not morosos.empty and not morosos[['latitud', 'longitud']].isnull().all().all():
-            map_center_lat_mora = morosos['latitud'].mean() if not morosos['latitud'].isnull().all() else 4.710989
+            map_center_mora = morosos['latitud'].mean() if not morosos['latitud'].isnull().all() else 4.710989
             map_center_lon_mora = morosos['longitud'].mean() if not morosos['longitud'].isnull().all() else -74.072090
-            m_mora = folium.Map(location=[map_center_lat_mora, map_center_lon_mora], zoom_start=13)
+            m_mora = folium.Map(location=[map_center_mora, map_center_lon_mora], zoom_start=13)
             for _, row in morosos.iterrows():
                 if pd.notnull(row['latitud']) and pd.notnull(row['longitud']):
                     folium.CircleMarker(
@@ -217,7 +226,12 @@ if uploaded_file:
 
         st.markdown("### Tabla de Predios Morosos")
         if not morosos.empty:
-            tabla_morosos = morosos[
+            # Asegurarse de que las columnas a formatear sean numéricas aquí también
+            morosos_display = morosos.copy()
+            morosos_display["avaluo_catastral"] = pd.to_numeric(morosos_display["avaluo_catastral"], errors='coerce').fillna(0)
+            morosos_display["valor_impuesto_a_pagar"] = pd.to_numeric(morosos_display["valor_impuesto_a_pagar"], errors='coerce').fillna(0)
+
+            tabla_morosos = morosos_display[
                 ["codigo_igac", "vereda", "sector", "destino_economico_predio", "avaluo_catastral", "valor_impuesto_a_pagar", "area_construida"]
             ]
             st.dataframe(tabla_morosos.reset_index(drop=True).style.format({"avaluo_catastral": "${:,.0f}", "valor_impuesto_a_pagar": "${:,.0f}"}))
@@ -276,7 +290,12 @@ if uploaded_file:
 
         st.markdown("### Tabla de Predios con Oportunidades Catastrales")
         if not oportunidades.empty:
-            st.dataframe(oportunidades[[
+            # Asegurarse de que las columnas a formatear sean numéricas aquí también
+            oportunidades_display = oportunidades.copy()
+            oportunidades_display["avaluo_catastral"] = pd.to_numeric(oportunidades_display["avaluo_catastral"], errors='coerce').fillna(0)
+            oportunidades_display["valor_impuesto_a_pagar"] = pd.to_numeric(oportunidades_display["valor_impuesto_a_pagar"], errors='coerce').fillna(0)
+
+            st.dataframe(oportunidades_display[[
                 "codigo_igac", "vereda", "sector", "avaluo_catastral", "valor_impuesto_a_pagar", "area_construida"
             ]].reset_index(drop=True).style.format({"avaluo_catastral": "${:,.0f}", "valor_impuesto_a_pagar": "${:,.0f}"}))
         else:
@@ -312,7 +331,12 @@ if uploaded_file:
 
         st.markdown("### Tabla de Predios Focalizados para Cobro")
         if not predios_focalizables.empty:
-            st.dataframe(predios_focalizables[[
+            # Asegurarse de que las columnas a formatear sean numéricas aquí también
+            predios_focalizables_display = predios_focalizables.copy()
+            predios_focalizables_display["avaluo_catastral"] = pd.to_numeric(predios_focalizables_display["avaluo_catastral"], errors='coerce').fillna(0)
+            predios_focalizables_display["valor_impuesto_a_pagar"] = pd.to_numeric(predios_focalizables_display["valor_impuesto_a_pagar"], errors='coerce').fillna(0)
+
+            st.dataframe(predios_focalizables_display[[
                 "codigo_igac", "vereda", "sector", "avaluo_catastral", "valor_impuesto_a_pagar", "area_construida"
             ]].reset_index(drop=True).style.format({"avaluo_catastral": "${:,.0f}", "valor_impuesto_a_pagar": "${:,.0f}"}))
         else:
@@ -366,7 +390,11 @@ if uploaded_file:
 
         st.markdown("### Tabla de Predios Involucrados en Simulación")
         if not top_simulados.empty:
-            st.dataframe(top_simulados[[
+            # Asegurarse de que las columnas a formatear sean numéricas aquí también
+            top_simulados_display = top_simulados.copy()
+            top_simulados_display["valor_impuesto_a_pagar"] = pd.to_numeric(top_simulados_display["valor_impuesto_a_pagar"], errors='coerce').fillna(0)
+
+            st.dataframe(top_simulados_display[[
                 "codigo_igac", "vereda", "sector", "valor_impuesto_a_pagar"
             ]].reset_index(drop=True).style.format({"valor_impuesto_a_pagar": "${:,.0f}"}))
         else:
@@ -396,10 +424,12 @@ if uploaded_file:
         df_riesgo['riesgo_catastral'] = 1
         # Asegurarse de que haya suficientes valores para calcular la mediana y los quantiles
         if not df_riesgo['avaluo_catastral'].empty and not df_riesgo['area_construida'].empty:
-            sin_construccion_cond = (df_riesgo['area_construida'] == 0) & (df_riesgo['avaluo_catastral'] > df_riesgo['avaluo_catastral'].median())
-            bajo_construccion_cond = (df_riesgo['area_construida'] < df_riesgo['area_construida'].quantile(0.2)) & (df_riesgo['avaluo_catastral'] > df_riesgo['avaluo_catastral'].quantile(0.6))
-            df_riesgo.loc[sin_construccion_cond, 'riesgo_catastral'] = 5
-            df_riesgo.loc[bajo_construccion_cond, 'riesgo_catastral'] = 3
+            # Añadir condición para evitar median() o quantile() en series vacías
+            if df_riesgo['avaluo_catastral'].median() is not np.nan and df_riesgo['area_construida'].quantile(0.2) is not np.nan:
+                sin_construccion_cond = (df_riesgo['area_construida'] == 0) & (df_riesgo['avaluo_catastral'] > df_riesgo['avaluo_catastral'].median())
+                bajo_construccion_cond = (df_riesgo['area_construida'] < df_riesgo['area_construida'].quantile(0.2)) & (df_riesgo['avaluo_catastral'] > df_riesgo['avaluo_catastral'].quantile(0.6))
+                df_riesgo.loc[sin_construccion_cond, 'riesgo_catastral'] = 5
+                df_riesgo.loc[bajo_construccion_cond, 'riesgo_catastral'] = 3
 
         # Riesgo comportamental
         df_riesgo['riesgo_comportamental'] = 1
@@ -442,7 +472,14 @@ if uploaded_file:
 
         st.markdown("### Tabla de Predios con Mayor Riesgo")
         if not df_riesgo.empty:
-            st.dataframe(df_riesgo[[
+            # Asegurarse de que las columnas a formatear sean numéricas aquí también
+            df_riesgo_display = df_riesgo.copy()
+            df_riesgo_display["valor_impuesto_a_pagar"] = pd.to_numeric(df_riesgo_display["valor_impuesto_a_pagar"], errors='coerce').fillna(0)
+            df_riesgo_display["avaluo_catastral"] = pd.to_numeric(df_riesgo_display["avaluo_catastral"], errors='coerce').fillna(0)
+            df_riesgo_display["riesgo_total"] = pd.to_numeric(df_riesgo_display["riesgo_total"], errors='coerce').fillna(0)
+
+
+            st.dataframe(df_riesgo_display[[
                 "codigo_igac", "vereda", "sector", "valor_impuesto_a_pagar", "avaluo_catastral", "area_construida", "riesgo_total"
             ]].reset_index(drop=True).style.format({"valor_impuesto_a_pagar": "${:,.0f}", "avaluo_catastral": "${:,.0f}", "riesgo_total": "{:.2f}"}))
         else:
