@@ -47,9 +47,9 @@ if uploaded_file:
 
     df_filtrado = aplicar_filtros(df)
 
-tabs = st.tabs([
+tabs = st.tabs(["📊 Información General", "📌 Cumplimiento Tributario", "📉 Cartera Morosa", "🏗️ Oportunidades Catastrales", "💼 Estrategias de Cobro", "🔮 Simulación de Escenarios", "🗺️ Riesgo Geoespacial"])
 
-tabs = st.tabs([
+tabs = st.tabs(["📊 Información General", "📌 Cumplimiento Tributario", "📉 Cartera Morosa", "🏗️ Oportunidades Catastrales", "💼 Estrategias de Cobro", "🔮 Simulación de Escenarios", "🗺️ Riesgo Geoespacial"])
         "📊 Información General",
         "📌 Cumplimiento Tributario",
         "📉 Cartera Morosa",
