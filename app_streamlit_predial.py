@@ -80,7 +80,7 @@ with tabs[0]:
     try:
         st.dataframe(
             resumen_df.style.format(
-        )
+        ))
     except Exception as e:
         st.warning("No se pudo aplicar formato de estilo a la tabla.")
         st.dataframe(resumen_df)
