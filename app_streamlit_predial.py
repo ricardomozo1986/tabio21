@@ -77,7 +77,15 @@ with tabs[0]:
     rural = resumen_tabla(df_filtrado[df_filtrado['sector'] == 'RURAL'])
 
     resumen_df = pd.DataFrame([total, urbano, rural], index=["Total", "Urbano", "Rural"]).T
-    st.dataframe(resumen_df.style.format("${:,.0f}" if resumen_df.index.name != "Número de predios" else "{:,}"))
+    try:
+        st.dataframe(
+            resumen_df.style.format(
+                lambda x: f"${x:,.0f}" if isinstance(x, (int, float)) and resumen_df.index.name != "Número de predios" else f"{x:,}"
+            )
+        )
+    except Exception as e:
+        st.warning("No se pudo aplicar formato de estilo a la tabla.")
+        st.dataframe(resumen_df)
 
 
 
