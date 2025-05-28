@@ -80,7 +80,7 @@ with tabs[0]:
     try:
         st.dataframe(
             resumen_df.style.format(
-                lambda x: f"${x:,.0f}" if isinstance(x, (int, float)) and resumen_df.index.name != "Número de predios" else f"{x:,}"
+                lambda x: "${:,.0f}".format(x) if isinstance(x, (int, float)) and resumen_df.index.name != "Número de predios" else "{:,}".format(x)
             )
         )
     except Exception as e:
