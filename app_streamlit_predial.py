@@ -47,6 +47,8 @@ if uploaded_file:
 
     df_filtrado = aplicar_filtros(df)
 
+tabs = st.tabs(['📊 Información General', '📌 Cumplimiento Tributario', '📉 Cartera Morosa', '🏗️ Oportunidades Catastrales', '💼 Estrategias de Cobro', '🔮 Simulación de Escenarios', '🗺️ Riesgo Geoespacial'])
+
     tabs = st.tabs([
         "📊 Información General",
         "📌 Cumplimiento Tributario",
@@ -77,6 +79,12 @@ with tabs[0]:
     rural = resumen_tabla(df_filtrado[df_filtrado['sector'] == 'RURAL'])
 
     resumen_df = pd.DataFrame([total, urbano, rural], index=["Total", "Urbano", "Rural"]).T
+# Corrección automática de tipos antes de formatear
+    for col in df_filtrado.select_dtypes(include='object').columns:
+        try:
+            df_filtrado[col] = pd.to_numeric(df_filtrado[col], errors='coerce')
+        except:
+            pass
     st.dataframe(resumen_df.style.format("${:,.0f}" if resumen_df.index.name != "Número de predios" else "{:,}"))
 
 
@@ -123,6 +131,12 @@ with tabs[1]:
     tabla_pagados = pagados.sort_values(by="recaudo_predial", ascending=False)[
         ["codigo_igac", "vereda", "sector", "valor_impuesto_a_pagar", "recaudo_predial"]
     ]
+# Corrección automática de tipos antes de formatear
+    for col in df_filtrado.select_dtypes(include='object').columns:
+        try:
+            df_filtrado[col] = pd.to_numeric(df_filtrado[col], errors='coerce')
+        except:
+            pass
     st.dataframe(tabla_pagados.reset_index(drop=True).style.format("${:,.0f}"))
 
 
@@ -153,6 +167,12 @@ with tabs[2]:
     tabla_morosos = morosos[
         ["codigo_igac", "vereda", "sector", "destino_economico_predio", "avaluo_catastral", "valor_impuesto_a_pagar", "area_construida"]
     ]
+# Corrección automática de tipos antes de formatear
+    for col in df_filtrado.select_dtypes(include='object').columns:
+        try:
+            df_filtrado[col] = pd.to_numeric(df_filtrado[col], errors='coerce')
+        except:
+            pass
     st.dataframe(tabla_morosos.reset_index(drop=True).style.format("${:,.0f}"))
 
 
@@ -190,6 +210,12 @@ with tabs[3]:
     st.markdown("### Tabla de Predios con Oportunidades Catastrales")
     st.dataframe(oportunidades[[
         "codigo_igac", "vereda", "sector", "avaluo_catastral", "valor_impuesto_a_pagar", "area_construida"
+# Corrección automática de tipos antes de formatear
+    for col in df_filtrado.select_dtypes(include='object').columns:
+        try:
+            df_filtrado[col] = pd.to_numeric(df_filtrado[col], errors='coerce')
+        except:
+            pass
     ]].reset_index(drop=True).style.format("${:,.0f}"))
 
 
@@ -219,6 +245,12 @@ with tabs[4]:
     st.markdown("### Tabla de Predios Focalizados para Cobro")
     st.dataframe(predios_focalizables[[
         "codigo_igac", "vereda", "sector", "avaluo_catastral", "valor_impuesto_a_pagar", "area_construida"
+# Corrección automática de tipos antes de formatear
+    for col in df_filtrado.select_dtypes(include='object').columns:
+        try:
+            df_filtrado[col] = pd.to_numeric(df_filtrado[col], errors='coerce')
+        except:
+            pass
     ]].reset_index(drop=True).style.format("${:,.0f}"))
 
     st.markdown("### 📌 Recomendaciones Estratégicas")
@@ -265,6 +297,12 @@ with tabs[5]:
     st.markdown("### Tabla de Predios Involucrados en Simulación")
     st.dataframe(top_simulados[[
         "codigo_igac", "vereda", "sector", "valor_impuesto_a_pagar"
+# Corrección automática de tipos antes de formatear
+    for col in df_filtrado.select_dtypes(include='object').columns:
+        try:
+            df_filtrado[col] = pd.to_numeric(df_filtrado[col], errors='coerce')
+        except:
+            pass
     ]].reset_index(drop=True).style.format("${:,.0f}"))
 
 
@@ -321,4 +359,10 @@ with tabs[6]:
     st.markdown("### Tabla de Predios con Mayor Riesgo")
     st.dataframe(df_riesgo[[
         "codigo_igac", "vereda", "sector", "valor_impuesto_a_pagar", "avaluo_catastral", "area_construida", "riesgo_total"
+# Corrección automática de tipos antes de formatear
+    for col in df_filtrado.select_dtypes(include='object').columns:
+        try:
+            df_filtrado[col] = pd.to_numeric(df_filtrado[col], errors='coerce')
+        except:
+            pass
     ]].reset_index(drop=True).style.format({"valor_impuesto_a_pagar": "${:,.0f}", "avaluo_catastral": "${:,.0f}", "riesgo_total": "{:.2f}"}))
