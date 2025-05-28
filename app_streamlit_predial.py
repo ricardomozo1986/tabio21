@@ -57,7 +57,23 @@ tabs = st.tabs([
     "🗺️ Riesgo Geoespacial"
 ])
 
-
+tabs = st.tabs([
+    "📊 Información General",
+    "📌 Cumplimiento Tributario",
+    "📉 Cartera Morosa",
+    "🏗️ Oportunidades Catastrales",
+    "💼 Estrategias de Cobro",
+    "🔮 Simulación de Escenarios",
+    "🗺️ Riesgo Geoespacial"
+])
+        "📊 Información General",
+        "📌 Cumplimiento Tributario",
+        "📉 Cartera Morosa",
+        "🏗️ Oportunidades Catastrales",
+        "💼 Estrategias de Cobro",
+        "🔮 Simulación de Escenarios",
+        "🗺️ Riesgo Geoespacial"
+    ])
 
 
 
@@ -168,9 +184,11 @@ with tabs[2]:
         ["codigo_igac", "vereda", "sector", "destino_economico_predio", "avaluo_catastral", "valor_impuesto_a_pagar", "area_construida"]
     ]
 # Corrección automática de tipos antes de formatear
-    for col in df_filtrado.select_dtypes(include='object').columns:
+            pass
+    # Corrección automática de tipos antes de formatear
+    for col in morosos.select_dtypes(include='object').columns:
         try:
-            df_filtrado[col] = pd.to_numeric(df_filtrado[col], errors='coerce')
+            morosos[col] = pd.to_numeric(morosos[col], errors='coerce')
         except:
             pass
     st.dataframe(tabla_morosos.reset_index(drop=True).style.format("${:,.0f}"))
