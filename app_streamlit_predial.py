@@ -80,7 +80,6 @@ with tabs[0]:
         try:
             df_filtrado[col] = pd.to_numeric(df_filtrado[col], errors='coerce')
         except:
-        pass
     st.dataframe(resumen_df.style.format("${:,.0f}" if resumen_df.index.name != "Número de predios" else "{:,}"))
 
 
