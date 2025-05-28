@@ -66,7 +66,14 @@ tabs = st.tabs([
     "🔮 Simulación de Escenarios",
     "🗺️ Riesgo Geoespacial"
 ])
-        
+        "📊 Información General",
+        "📌 Cumplimiento Tributario",
+        "📉 Cartera Morosa",
+        "🏗️ Oportunidades Catastrales",
+        "💼 Estrategias de Cobro",
+        "🔮 Simulación de Escenarios",
+        "🗺️ Riesgo Geoespacial"
+    ])
 
 
 
@@ -218,7 +225,7 @@ with tabs[3]:
 
     st.markdown("### Tabla de Predios con Oportunidades Catastrales")
     st.dataframe(oportunidades[[
-        "codigo_igac", "vereda", "sector", "avaluo_catastral", "valor_impuesto_a_pagar", "area_construida"]])
+        "codigo_igac", "vereda", "sector", "avaluo_catastral", "valor_impuesto_a_pagar", "area_construida"
 # Corrección automática de tipos antes de formatear
     for col in df_filtrado.select_dtypes(include='object').columns:
         try:
